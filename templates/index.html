@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Filter The Search History</title>
+</head>
+
+<body>
+    <h1 style="text-align:center;border:10px solid #a18eef; width:30%; margin:0 auto;padding:15px;">Filter The Search History</h1>
+    <div class="keyword">
+        <h1>The Keyword</h1>
+
+        <table id="tab1">
+            <tr>
+                <td>
+                    {% for data in data %}
+                    <input type="checkbox" name="keyword" value="{{data.keyword}}"
+                        onclick="getvalues(this)">{{data.keyword}} ({{data.the_count}})
+                    {% endfor %}
+                </td>
+            </tr>
+        </table>
+
+    </div>
+
+
+    <div class="user">
+        <h1>The users</h1>
+        <table id="tab2">
+            <tr>
+                <td>
+                    {% for user in user %}
+                    <input type="checkbox" name="user" class="id_username" value={{user.username}}
+                        onclick="getvalues(this)"> {{user.username}}
+                    {% endfor %}
+                </td>
+            </tr>
+        </table>
+    </div>
+
+
+    <div class="date">
+        <h1>Select Date</h1>
+        <table id="tab2">
+            <tr>
+                <td>
+
+                    <input type="checkbox" name="date" class="id_username" value="today" onclick="getvalues(this)">
+                    See data from Today
+                </td>
+            </tr>
+            <tr>
+                <td>
+
+                    <input type="checkbox" name="date" class="id_username" value="yesterday" onclick="getvalues(this)">
+                    See data from Yesterday
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="checkbox" name="date" class="id_username" value="last_week" onclick="getvalues(this)">
+                    See data from Last Week
+                </td>
+            </tr>
+            <tr>
+                <td>
+
+                    <input type="checkbox" name="date" class="id_username" value="lastMonth" onclick="getvalues(this)">
+                    see data from Last Month
+
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <hr>
+    <h1>Search History</h1>
+    <div id="displayvalues">
+
+    </div>
+
+</body>
+
+<script>
+    // <===================== declare the all variable ==================== >
+    let keyword_array = [];
+    let user_array = [];
+    let date_array = [];
+
+    // <===================== Push the check item in the array ==================== >
+    function pushItem(arrayName, checkbox) {
+        arrayName.push(checkbox.value)
+        document.getElementById("displayvalues").innerHTML = ''
+    }
+
+    // <===================== remove the uncheck items from array ==================== >
+    function removeItem(arrayName, checkbox) {
+        let index = arrayName.indexOf(checkbox.value);
+        if (index !== -1) {
+            arrayName.splice(index, 1);
+            document.getElementById("displayvalues").innerHTML = ''
+        }
+    }
+
+
+    // <===================== get the checkbox value from input box ==================== >
+    function getvalues(checkbox) {
+        if (checkbox.checked) {
+            if (checkbox.name === 'keyword') {
+                pushItem(keyword_array, checkbox)
+            } else if (checkbox.name === 'user') {
+                pushItem(user_array, checkbox)
+            } else if (checkbox.name === 'date') {
+                pushItem(date_array, checkbox)
+            }
+        } else {
+            if (checkbox.name === 'keyword') {
+                removeItem(keyword_array, checkbox)
+            }
+            else if (checkbox.name === 'user') {
+                removeItem(user_array, checkbox)
+            } else if (checkbox.name === 'date') {
+                removeItem(date_array, checkbox)
+            }
+        }
+        fetchData();
+    }
+
+
+    // <===================== Add the html element ==================== >
+    const addHTMLCode = (data) => {
+        console.log('adding', data);
+        data.length > 0 ?
+            data.map((item) => {
+                html = `
+                <h3>
+                        The user ${item.fields.user} search ${item.fields.keyword} in ${item.fields.date} ${item.fields.time}
+                    </h3>`
+                return (
+                    document.getElementById("displayvalues").innerHTML += html
+                );
+            }) : document.getElementById("displayvalues").innerHTML += "<h3>No data found</h3>";
+
+    }
+
+    // <===================== fatch the data from database ==================== >
+    async function fetchData() {
+        try {
+            const res = await fetch("http://127.0.0.1:8000/filter", {
+                method: "POST",
+                body: JSON.stringify({
+                    keyword: keyword_array,
+                    user: user_array,
+                    date: date_array,
+                }),
+                headers: {
+                    "Content-type": "application/json; charset=UTF-8"
+                }
+            }).then(response => response.json()).then(data => addHTMLCode(data));
+
+        }
+        catch (e) {
+            console.log('eee', e);
+        }
+
+
+
+    }
+
+
+
+
+</script>
+
+</html>

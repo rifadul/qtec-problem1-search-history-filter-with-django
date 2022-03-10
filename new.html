@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+</head>
+
+<body>
+    <form>
+        <div>
+            <input type="checkbox" onclick="CheckBoxValue()" class="coursecheck" data-siam="JavaScript" />JavaScript
+            <input type="checkbox" onclick="CheckBoxValue()" class="coursecheck" data-siam="php" />PHP
+            <input type="checkbox" onclick="CheckBoxValue()" class="coursecheck" data-siam="python" />Python
+        </div>
+        <div>
+            <input type="time" onclick="CheckBoxValue()" class="timeclass" />
+        </div>
+    </form>
+    <script>
+        //CheckBoxValue function
+        function CheckBoxValue() {
+            //checkbox code start
+            const values = document.querySelectorAll(".coursecheck");
+            values.forEach((el, i) => {
+                if (el.checked) {
+                    let a = el.getAttribute("data-siam");
+                    console.log(a);
+                }
+            });
+
+            //time code start
+            let timecount = "";
+            const time = document.querySelector(".timeclass");
+            time.addEventListener("input", function (e) {
+                timecount = time.value;
+                console.log(timecount);
+            });
+        }
+    </script>
+</body>
+
+</html>

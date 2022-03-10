@@ -1,0 +1,176 @@
+<!-- async function keySearch() {
+    console.log("keySearch")
+    let keyword = document.getElementsByClassNames("id_keyword").value
+    let user = document.getElementsByClassNames("id_username").value
+    console.log("keyword", keyword)
+    console.log("user", user)
+    try {
+        fetch("http://127.0.0.1:8000/search", {
+            method: "POST",
+            body: JSON.stringify({
+                keyword: keyword,
+                user: user,
+            }),
+            headers: {
+                "Content-type": "application/json; charset=UTF-8"
+            }
+        })
+    }
+    catch (e) {
+
+    }
+} -->
+
+
+
+
+
+<!-- 
+
+    
+    let datajson = {{data | toson }}
+    console.log('ddd',datajson)
+    function getvalues() {
+        var selected = new Array();
+        var chkbox = document.getElementById("tab1");
+        var selchk = chkbox.getElementsByTagName("input");
+
+        for (var i = 0; i < selchk.length; i++) {
+            if (selchk[i].checked) {
+                selected.push(selchk[i].value);
+            }
+        }
+        if (selected.length > 0) {
+            document.getElementById("displayvalues").innerHTML = selected;
+        }
+    }
+ -->
+
+
+
+
+console.log(res)
+let html = '';
+res.data.foreach(function (item, idx) {
+html += `
+<td>${item.name}</td>
+`
+document.getElementById("displayvalues").innerHTML = html;
+console.log(res)
+})
+
+
+
+
+
+<!-- final updated new scripts  -->
+
+<script>
+    let keyword_array = [];
+    let user_array = [];
+    let time_array = [];
+    let date_array = [];
+
+    function pushValue(arrayName, checkbox) {
+        arrayName.push(checkbox.value)
+        document.getElementById("displayvalues").innerHTML = ''
+    }
+    function getvalues(checkbox) {
+        //console.log('prr time')
+        if (checkbox.checked) {
+            if (checkbox.name === 'keyword') {
+                pushValue(keyword_array, checkbox)
+                // keyword_array.push(checkbox.value)
+                //document.getElementById("displayvalues").innerHTML = ''
+            } else if (checkbox.name === 'user') {
+                pushValue(user_array, checkbox)
+                //user_array.push(checkbox.value)
+                //document.getElementById("displayvalues").innerHTML = ''
+            } else if (checkbox.name === 'time') {
+                time_array.push(checkbox.value)
+                document.getElementById("displayvalues").innerHTML = ''
+            } else if (checkbox.name === 'date') {
+                pushValue(date_array, checkbox)
+                //date_array.push(checkbox.value)
+                //document.getElementById("displayvalues").innerHTML = ''
+            }
+        } else {
+
+            if (checkbox.name === 'keyword') {
+                console.log(checkbox.value)
+                let index = keyword_array.indexOf(checkbox.value);
+                if (index !== -1) {
+                    keyword_array.splice(index, 1);
+                    document.getElementById("displayvalues").innerHTML = ''
+                }
+            }
+            else if (checkbox.name === 'user') {
+                let index = user_array.indexOf(checkbox.value);
+                if (index !== -1) {
+                    user_array.splice(index, 1);
+                    document.getElementById("displayvalues").innerHTML = ''
+                }
+            } else if (checkbox.name === 'time') {
+                let index = time_array.indexOf(checkbox.value);
+                if (index !== -1) {
+                    time_array.splice(index, 1);
+                    document.getElementById("displayvalues").innerHTML = ''
+                }
+            } else if (checkbox.name === 'date') {
+                let index = date_array.indexOf(checkbox.value);
+                if (index !== -1) {
+                    date_array.splice(index, 1);
+                    document.getElementById("displayvalues").innerHTML = ''
+                }
+            }
+        }
+        fetchData();
+    }
+
+    function addCode() {
+        document.getElementById("displayvalues").innerHTML +=
+            "<h3>This is the text which has been inserted by JS</h3>";
+    }
+    const addInHTML = (data) => {
+        data.map(item => {
+            document.getElementById("displayvalues").innerHTML += ''
+            html = `<h3>The user ${item.fields.user} search ${item.fields.keyword} in ${item.fields.date} ${item.fields.time}</h3>`
+            return (
+                document.getElementById("displayvalues").innerHTML += html
+
+
+            );
+        });
+
+    }
+
+    async function fetchData() {
+        try {
+            const res = await fetch("http://127.0.0.1:8000/search", {
+                method: "POST",
+                body: JSON.stringify({
+                    keyword: keyword_array,
+                    user: user_array,
+                    time: time_array,
+                    date: date_array,
+                }),
+                headers: {
+                    "Content-type": "application/json; charset=UTF-8"
+                }
+            }).then(response => response.json()).then(data => addInHTML(data));
+            //.then(response => response.json()).then(data => console.log('mydata', data));
+            //console.log(res)
+
+        }
+        catch (e) {
+            console.log('eee', e);
+        }
+
+
+
+    }
+
+
+
+
+</script>
