@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-g5q%3t%uwb&kp9vu@5rd2$96r8k3$r)xkl!2wn+9ad(v%4$!@4
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['django-search-history-filter.herokuapp.com','localhost']
 
 
 # Application definition
