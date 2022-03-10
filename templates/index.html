@@ -150,7 +150,7 @@
     // <===================== fatch the data from database ==================== >
     async function fetchData() {
         try {
-            const res = await fetch("http://127.0.0.1:8000/filter", {
+            const res = await fetch("https://django-search-history-filter.herokuapp.com/filter", {
                 method: "POST",
                 body: JSON.stringify({
                     keyword: keyword_array,
